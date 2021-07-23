@@ -15,6 +15,7 @@ class Navbar extends Component {
             onClick={(e) => {
               e.preventDefault();
               this.props.history.push('/');
+              window.location.reload();
             }}
           >
             <img
@@ -27,7 +28,7 @@ class Navbar extends Component {
             rebbit
           </a>
 
-          <div className='collapse navbar-collapse' id='navbarNav'>
+          <div className='navbar-collapse' id='navbarNav'>
             <ul className='navbar-nav'>
               <li className='nav-item active'>
                 <a
@@ -48,7 +49,7 @@ class Navbar extends Component {
             </ul>
           </div>
           <ul className='navbar-nav'>
-            {!auth.getCurrentUser() ? (
+            {!this.props.isLI ? (
               <li>
                 <a
                   className='nav-link'
@@ -71,13 +72,14 @@ class Navbar extends Component {
                   e.preventDefault();
                   this.props.history.push('/');
                   auth.logout();
+                  window.location.reload();
                 }}
               >
                 Logout
               </a>
             )}
             <li>
-              {!auth.getCurrentUser() ? (
+              {!this.props.isLI ? (
                 <a
                   className='nav-link'
                   // eslint-disable-next-line
@@ -97,6 +99,7 @@ class Navbar extends Component {
                   onClick={(e) => {
                     e.preventDefault();
                     this.props.history.push('/u/');
+                    window.location.reload();
                   }}
                 >
                   My posts

@@ -31,6 +31,7 @@ exports.user_login_post = async (req, res, next) => {
   if (user == null) return res.status(400).send('Cannot find user');
 
   try {
+    console.log(req.body);
     if (await bcrypt.compare(req.body.password, user.password)) {
       const accessToken = auth.generateAccessToken({ username: user.username });
       res.json({ accessToken: accessToken });

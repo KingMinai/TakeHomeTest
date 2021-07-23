@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import logo from '../rabbit.svg';
-import AuthService from '../auth/authService';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class UserLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      incorrectInfo: false,
       username: '',
       email: '',
       password: '',
@@ -24,8 +25,25 @@ class UserLogin extends Component {
     this.setState({ password: event.target.value });
   }
 
-  handleFormSubmit() {
-    AuthService.login(this.state.username, this.state.password);
+  handleFormSubmit(event) {
+    event.preventDefault();
+    axios
+      .post(
+        '/su/login',
+        { username: this.state.username, password: this.state.password },
+        {
+          headers: { Accept: 'application/json' },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data.accessToken) {
+          localStorage.setItem('user', JSON.stringify(res.data));
+        }
+      })
+      .then(this.props.history.push('/'))
+      .then(window.location.reload())
+      .catch((e) => console.log(e));
   }
 
   render() {
@@ -42,7 +60,11 @@ class UserLogin extends Component {
                   className='d-inline-block align-center logo'
                   alt=''
                 />
-                <h5 className='mt-3'>Enter your username and password to login</h5>
+                <h5 className='mt-3'>
+                  {this.state.incorrectInfo
+                    ? 'Please check your info and try again'
+                    : 'Enter your username and password to login'}
+                </h5>
                 <form onSubmit={this.handleFormSubmit}>
                   <div className='form-input'>
                     {' '}

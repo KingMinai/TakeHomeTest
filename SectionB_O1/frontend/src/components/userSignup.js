@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import logo from '../rabbit.svg';
-import '../App.css';
-import AuthService from '../auth/authService';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 class UserSignup extends Component {
   constructor(props) {
@@ -29,9 +28,16 @@ class UserSignup extends Component {
     this.setState({ password: event.target.value });
   }
 
-  handleFormSubmit() {
-    AuthService.register(this.state.username, this.state.email, this.state.password);
-    this.props.history.push('/u/login');
+  handleFormSubmit(event) {
+    event.preventDefault();
+    axios
+      .post('/su/signup', {
+        username: this.state.username,
+        email: this.state.email.toLowerCase(),
+        password: this.state.password,
+      })
+      .then(this.props.history.push('/u/login'))
+      .then(window.location.reload());
   }
 
   render() {
